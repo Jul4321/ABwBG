@@ -1,0 +1,18 @@
+---
+title: "Zadanie 3"
+author: "Julia"
+date: "2024-10-15"
+output: html_document
+---
+
+# ***Zadanie 3***
+
+## **ADMM : Algorithms using Alternating Direction Method of Multipliers**
+
+### Wprowadzenie
+
+W zadaniu 3 wybrałam pakiet ***ADMM***, jest to *metoda przemiennego kierunku mnożników*. Jest to algorytm rozwiązujący problemy optymalizacji wypukłej poprzez rozbicie ich na mniejsze części, z których każda jest łatwiejsza do obsługi. Ostatnio znalazła szerokie zastosowanie w wielu obszarach.
+
+### Podsumowanie
+
+Zainteresowanych użytkowników/czytelników zachęcam do odwiedzenia strony internetowej prof. Stephena Boyda, która w całości poświęcona jest temu tematowi. [Link do strony](https://stanford.edu/~boyd/papers/admm_distr_stats.html)
