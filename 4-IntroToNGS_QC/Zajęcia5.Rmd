@@ -1,0 +1,41 @@
+# Bioconductor- intro
+
+## Instalacja pakietu '''BiocManager'''
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE)) 
+    install.packages("BiocManager")
+```
+
+## Instalacja podstawowych pakietów
+```{r}
+BiocManager::install(c("GenomicFeatures", "AnnotationDbi", 
+"ShortRead", "Biostrings"))
+```
+
+## Wczytanie sekwencji z pliku FASTA
+```{r}
+dna_seqs <- readDNAStringSet("C:/Users/s202816/Downloads/examples.fasta")
+```
+
+```{r}
+dna_seqs[1:5]
+```
+## Odwrócenie i komplementarność sekwencji
+
+```{r}
+rev_comp_seqs <- reverseComplement(dna_seqs)
+rev_comp_seqs[1:5]
+```
+## Obliczanie zawartości GC
+```{r}
+gc_content <- letterFrequency(dna_seqs, letters = c("G", "C"), as.prob = TRUE)
+gc_content
+```
+
+
+
+
+
+
+
+
