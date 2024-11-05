@@ -1,0 +1,72 @@
+---
+title: "Ćwiczenia"
+author: "Julia"
+date: "2024-11-05"
+output: html_document
+---
+
+## Instalowanie pakietu BiocManager
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+```
+
+## Instalujemy pakiety i sprawdzamy ich wersje
+
+```{r}
+BiocManager::install(c("ShortRead", "Rqc", "Biostrings"), force = TRUE)
+```
+
+```{r}
+library(ShortRead)
+library(Rqc)
+library(Biostrings)
+
+packageVersion("ShortRead")
+packageVersion("Rqc")
+packageVersion("Biostrings")
+```
+
+## Wczytanie plik FASTQ do R
+
+```{r}
+fq_file <- "C:/Users/s202816/Downloads/SRR31220563.fastq (1).gz" 
+```
+
+```{r}
+fq_reads <- readFastq(fq_file)
+```
+
+## Sprawdzamy podstawowe informacje o danych:
+
+### Liczba odczytów
+
+```{r}
+length(fq_reads)
+```
+
+### Podgląd pierwszych kilku odczytów
+
+```{r}
+fq_reads[1:5]
+```
+
+## Generowanie raportu QC
+
+### Generowanie obiektu z wynikami kontroli jakości:
+
+```{r}
+qa_results <- qa(fq_file, type = "fastq")
+```
+
+## Analiza zawartości GC
+
+```{r}
+gc_content <- letterFrequency(sread(fq_reads), letters = "GC", as.prob = TRUE)
+```
+
+```{r}
+hist(gc_content, breaks = 50, main = "Zawartość GC w oryginalnych odczytach", xlab = "Procent GC")
+```
+## Generowanie zbiorczego raportu QC dla wielu próbek
