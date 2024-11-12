@@ -1,0 +1,108 @@
+---
+title: "Untitled"
+author: "Julia"
+date: "2024-11-12"
+output: html_document
+---
+## Instalowanie pakietu BiocManager
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+```
+
+## Instalujemy pakiety i sprawdzamy ich wersje
+
+```{r}
+BiocManager::install(c("ShortRead", "Rqc", "Biostrings"), force = TRUE)
+```
+
+```{r}
+library(ShortRead)
+library(Rqc)
+library(Biostrings)
+
+packageVersion("ShortRead")
+packageVersion("Rqc")
+packageVersion("Biostrings")
+```
+
+## Wczytanie plik FASTQ do R
+
+```{r}
+fq_file <- "C:/Users/pisko/Desktop/FASTA/SRR31220563.fastq.gz" 
+```
+
+```{r}
+fq_reads <- readFastq(fq_file)
+```
+
+## Sprawdzamy podstawowe informacje o danych:
+
+### Liczba odczytów
+
+```{r}
+length(fq_reads)
+```
+
+```{r}
+num_reads <- length(fq_reads)
+print(num_reads)
+```
+
+### Podgląd pierwszych kilku odczytów
+
+```{r}
+fq_reads[1:5]
+```
+
+```{r}
+pierw_odczyt <- fq_reads[1:5]
+print(pierw_odczyt)
+```
+## Generowanie raportu QC
+
+### Generowanie obiektu z wynikami kontroli jakości:
+
+```{r}
+qa_results <- qa(fq_file, type = "fastq")
+```
+
+### Generowanie raportu QC
+
+```{r}
+report(qa_results, dest = "C:/Users/pisko/Desktop/Raport")
+```
+
+### Opis raportu. Analiza wyników
+Liczba odczytów to 2,090,228. Jest to niższa wartoć niż referencyjna (25-30mln)
+Wykres „Base call frequency” powinien pokazywać równomierne rozmieszczenie częstotliwości baz
+Na wykresie „Overall read quality” obserwujemy wysokiej jakości odczyty ponieważ tworzy się wyraźny szczyt po prawej stronie wykresu
+Wykres rozkładu pokrycia („Read Distribution”) wykazuje nagłe przejście z niskiej na wysoką proporcję odczytów, co odzwierciedla równomierne pokrycie.
+Brak obecności zduplikowanych odczytów, które mogłyby sugerować zanieczyszczenia lub problem z biblioteką.
+Wykres „Per-cycle quality score” wykazuje spadek jakości w cyklach pod koniec sekwencji, co jest typowe
+Raport wskazuje, że nie zaobserwowano wyraźnych kontaminacji adapterem. To pozytywny wskaźnik, sugerujący, że proces przygotowania próbki był staranny.
+
+
+## Analiza zawartości GC
+
+```{r}
+gc_content <- letterFrequency(sread(fq_reads), letters = "GC", as.prob = TRUE)
+```
+```{r}
+hist(gc_content, breaks = 50, main = "Zawartość GC w oryginalnych odczytach", xlab = "Procent GC")
+```
+#### Zawartość GC jest zgodna z oczekiwaniami dla Escherichia coli.
+
+
+## Generowanie zbiorczego raportu QC dla wielu próbek
+
+### Raport QC dla wszystkich plików
+
+```{r}
+fq_files <- list.files(path = "C:/Users/pisko/Desktop/FASTA", pattern = "SRR31309454.fastq.gz", full.names = TRUE)
+qa_results <- qa(fq_files, type = "fastq")
+report(qa_results, dest = "QA_report_multi")
+```
+
+
