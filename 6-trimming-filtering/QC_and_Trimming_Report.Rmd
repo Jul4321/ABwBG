@@ -1,0 +1,219 @@
+# Przycinanie (trimming) i filtrowanie danych NGS
+
+## 1. Wczytanie plików FASTQ
+
+```{r}
+library(ShortRead)
+fq_reads1 <- readFastq("C:/Users/pisko/Downloads/ecoli_simulated1_with_adapters.fq")
+fq_reads2 <- readFastq("C:/Users/pisko/Downloads/ecoli_simulated2_with_adapters.fq")
+```
+
+## 2. Przycinanie odczytów na podstawie jakości
+
+### Przycinanie odczytów forward
+
+```{r}
+  trimmed_reads1 <- trimTailw(fq_reads1, k = 2, a = "B", halfwidth = 1)
+```
+
+### Przycinanie odczytów reverse
+
+```{r}
+trimmed_reads2 <- trimTailw(fq_reads2, k = 2, a = "B", halfwidth = 1)
+```
+
+### sprawdzenie ile odczytów zostało przyciętych
+
+```{r}
+length(fq_reads1)
+length(trimmed_reads1)
+
+length(fq_reads2)
+length(trimmed_reads2)
+
+trimmed_count1 <- sum(width(trimmed_reads1) < width(fq_reads1))
+trimmed_count2 <- sum(width(trimmed_reads2) < width(fq_reads2))
+```
+
+### Obliczanie procentu zmodyfikowanych odczytów
+
+```         
+            ((odczyty przycięte)/(odczyty przed przecięciem))*100
+```
+
+Przecięte odczyty obliczmy odejmując odczyty przed i po odcięciu
+
+#### % reads1= 8.19%
+
+#### % reads2= 11.56%
+
+## 3. Filtracja odczytów o niskiej jakości
+
+### Filtrowanie odczytów forward
+
+```{r}
+filtered_reads1 <- trimmed_reads1[width(trimmed_reads1) >= 50]
+```
+
+### Filtrowanie odczytów reverse
+
+```{r}
+filtered_reads2 <- trimmed_reads2[width(trimmed_reads2) >= 50]
+```
+
+### Odczyty forward
+
+```{r}
+length(trimmed_reads1)       
+length(filtered_reads1)
+```
+
+### Odczyty reverse
+
+```{r}
+length(trimmed_reads2)
+length(filtered_reads2)
+```
+
+#### Odrzucone odczyty reads1: 284123-248565=35558
+
+#### Procent odczytów odrzuconych podczas filtracji: (35558/284123)\*100= 12,5%
+
+#### Odrzucone odczyty reads2:273668-223516=50152
+
+#### Procent odczytów odrzuconych podczas filtracji: (50152/273668)\*100= 18,3%
+
+## 4. Ponowna kontrola jakości po przycinaniu i filtracji
+
+### Zapisanie przetworzonych odczytów do nowych plików FASTQ
+
+```{r}
+writeFastq(filtered_reads1, "C:/Users/pisko/Downloads/ecoli_simulated1_processed.fq")
+writeFastq(filtered_reads2, "C:/Users/pisko/Downloads/ecoli_simulated2_processed.fq")
+
+```
+
+### Genertowanie raportów QC dla przetworzonych danych
+
+```{r}
+qa_results1 <- qa("C:/Users/pisko/Downloads/ecoli_simulated1_with_adapters.fq", type = "fastq")   
+qa_results1_processed <- qa( "C:/Users/pisko/Downloads/ecoli_simulated1_processed.fq", type = "fastq")
+report(qa_results1, dest = "C:/Users/pisko/Desktop/RaportQC_1")
+report(qa_results1_processed, dest = "C:/Users/pisko/Desktop/RaportQC_1_processed")
+
+qa_results2 <- qa("C:/Users/pisko/Downloads/ecoli_simulated2_with_adapters.fq", type = "fastq")   
+qa_results2_processed <- qa("C:/Users/pisko/Downloads/ecoli_simulated2_processed.fq", type = "fastq")
+report(qa_results2, dest = "C:/Users/pisko/Desktop/RaportQC_2")
+report(qa_results2_processed, dest = "C:/Users/pisko/Desktop/RaportQC_2_processed")
+```
+
+#### Wstępne dane dla raport 1 zawierają 309440 odczytów. Po filtraji liczba odczytów spadła do 248565.Filtracja poprawia jakość danych, eliminując odczyty, które ie spełniają określonych kryteriów jakościowych.
+
+#### Raport 2 zawiera w danych przed filtracją 309440 odczytów, natomiast po filtracji liczba odczytów spadła do 223516. Filtracja eliminuje odczyty które nie spełniają kryteriów jakościowych, dzięki temu poprawia się ogólna jakość odczytu.
+
+## 5. Analiza rozkładu długości odczytów
+
+### Porównanie rozkładu długości odczytów przed i po przycinaniu
+
+#### Przed przycinaniem (odczyty forward)
+
+```{r}
+hist(width(fq_reads1), breaks = 50, main = "Długość odczytów forward przed przycinaniem", xlab = "Długość (bp)")
+```
+
+#### Po przycinaniu (odczyty forward)
+
+```{r}
+hist(width(filtered_reads1), breaks = 50, main = "Długość odczytów forward po przycinaniu", xlab = "Długość (bp)")
+```
+
+#### Przed przycinaniem (odczyty reverse)
+
+```{r}
+hist(width(fq_reads2), breaks = 50, main = "Długość odczytów reverse przed przycinaniem", xlab = "Długość (bp)")
+```
+
+#### Po przycinaniu (odczyty forward)
+
+```{r}
+hist(width(filtered_reads2), breaks = 50, main = "Długość odczytów reverse po przycinaniu", xlab = "Długość (bp)")
+```
+
+#### Histogram długości odczytów forward przed przycinaniem pokazuje rozkład długości odczytów o szerokim zakresie wartości oraz różnej długości, sugeruje to obecność elementów niskiej jakości lub zanieczyszczeń. Histogra długości odczytów forward po przycinaniu pokazuje wyraźne zmiany w rozkładzie długości. Odczyty są bardziej jednorodne pod względem długości ponieważ zosatały usunięte fragembty o niskiej jakości. Podobnie jest dla histograma długości odczytów reverse- przed przycinaniem długość odczytów przedstawia szeroki zakres, natomiast po przycięciu długość odczytów staje się bardziej jednorodna. Usunięcie sekwenci o niskiej jakości/ zanieczyszczeń powoduje skondensowanie długosci odczytów w węższym przedziale. Odczyty po przycinaniu są bardziej reprezentatywne dla rzeczywistych fragmentów.
+
+## 6. Wykrywanie i usuwanie sekwencji adapterów
+
+### Identyfikacja sekwencji adaptera (np. dla Illumina):
+
+```{r}
+library(Biostrings)
+  adapter_seq <- DNAString("AGATCGGAAGAGC")
+```
+
+### Przycinanie adapterów z odczytów forward:
+
+```{r}
+trimmed_reads1_adapt <- trimLRPatterns(
+  Lpattern = adapter_seq,
+  subject = filtered_reads1
+)
+```
+
+### Defuniujemy odczyty po przycięciu adapterów:
+
+```{r}
+filtered_reads1 <- trimmed_reads1_adapt
+```
+
+### Przycinanie adapterów z odczytów reverse:
+
+```{r}
+trimmed_reads2_adapt <- trimLRPatterns(
+  Lpattern = adapter_seq,
+  subject = filtered_reads2
+)
+```
+
+### Defuniujemy odczyty po przycięciu adapterów:
+
+```{r}
+filtered_reads2 <- trimmed_reads2_adapt
+```
+
+### Porównanie długości przed i po przycięciu adapterów
+
+```{r}
+length(filtered_reads1)
+length(trimmed_reads1)
+
+length(filtered_reads2)
+length(trimmed_reads2)
+```
+
+### Sprawdzenie ile odczytów zostało zmodyfikowanych
+
+```{r}
+sum(width(filtered_reads1) < width(trimmed_reads1))
+sum(width(filtered_reads2) < width(trimmed_reads2))
+```
+
+## 7. Ponowna kontrola jakości po usunięciu adapterów
+
+### zapisanie odczytów po usunieciu adapterów
+
+```{r}
+   writeFastq(filtered_reads1, "C:/Users/pisko/Downloads/ecoli_simulated1_final.fq")
+   writeFastq(filtered_reads2, "C:/Users/pisko/Downloads/ecoli_simulated2_final.fq")
+```
+
+### Generowaine ostatecznego raportu QC
+
+```{r}
+   qa_results1_final <- qa("C:/Users/pisko/Downloads/ecoli_simulated1_final.fq", type = "fastq")
+   report(qa_results1_final, dest = "C:/Users/pisko/Desktop/QA_report_read1_final")
+   
+   qa_results2_final <- qa("C:/Users/pisko/Downloads/ecoli_simulated2_final.fq", type = "fastq")
+   report(qa_results2_final, dest = "C:/Users/pisko/Desktop/QA_report_read2_final")
+```
+
+#### Odczyty stały się bardziej reprezentatywne ponieważ nie zawierają sztucznych fragmentów. Eliminacja błędów zwiazanych z adapterami poprawia ogólną jakość sekwencji, dodatkowo usunięcie adapterów zmniejsza zanieczyszczenie danych oraz zwiększa liczbe odczytów które mogą być użyte w analizach.
