@@ -1,0 +1,197 @@
+---
+title: "Ćwiczenia1"
+author: "Julia"
+date: "2024-11-17"
+output: html_document
+---
+# Zadanie 1: Podstawowe operacje matematyczne
+```{r}
+x <- 12
+y <-5
+```
+
+```{r}
+a <- x+y
+b <- x-y
+c <- x*y
+d <-x/y
+modulo <- x%%y
+dzielenie_calkowite <- x %/% y
+```
+
+```{r}
+bezwzgledna <- abs(-15)
+pierwiatek <- sqrt(25)
+logarytm <- log10(10000)
+zaokraglenie <- round(3.45678, digits = 2)
+góra <- ceiling(3.45678)
+dół <- floor(3.45678)
+```
+
+# Zadanie 2: Funkcje statystyczne
+```{r}
+dane <- c(3, 7, 12, 14, 21, 33)
+```
+
+```{r}
+srednia <- mean(dane)
+mediana <- median(dane)
+wariancja <- var(dane)
+odchylenie <- sd(dane)
+minimum <- min(dane)
+maksimum <- max(dane)
+suma <- sum(dane)
+statystyki <- summary(dane)
+```
+
+```{r}
+kolory <- c("czerwony", "zielony", "czerwony", "niebieski", "zielony")
+liczba_kolorow <- table(kolory)
+```
+
+# Zadanie 3: Operacje na wektorach i indeksowanie
+```{r}
+liczby <- 1:10
+pierwszy <- liczby[1]
+ostatni <- liczby[length(liczby)]
+podwektor <- liczby[3:7]
+wieksze_niz_5 <- liczby[liczby > 5]
+posortowane <- sort(liczby, decreasing = TRUE)
+indeksy <- order(liczby, decreasing = TRUE)
+rangi <- rank(-liczby)
+```
+
+# Zadanie 4: Praca z ramkami danych
+```{r}
+osoby <- data.frame(imie = c("Jan", "Anna", "Piotr"),
+                    wiek = c(28, 34, 23),
+                    miasto = c("Warszawa", "Kraków", "Poznań"))
+```
+
+
+```{r}
+kolumna_imie <- osoby$imie
+pierwszy_wiersz <- osoby[1, ]
+kolumna_miasto <- osoby$miasto
+osoby$plec <- c("M", "K", "M")
+osoby <- osoby[ , -which(names(osoby) == "miasto")]
+```
+
+# Zadanie 5: Funkcje logiczne i warunkowe
+```{r}
+a <- 8
+b <- 15
+relacje <- c(a == b, a != b, a < b, a > b, a <= b, a >= b)
+logiczne <- c(a > 0 & b < 20, a > 0 | b < 20)
+```
+
+```{r}
+ocena <- 75
+wynik <- ifelse(ocena >= 50, "Pozytywna", "Negatywna")
+```
+
+```{r}
+wektor <- c(2, -5, 7, -3)
+mniejszy_od_zera <- any(wektor < 0)
+wszystkie_wieksze_od_zera <- all(wektor > 0)
+```
+
+# Zadanie 6: Pętle i iteracje 
+```{r}
+for (i in 1:5) print(i)
+
+i <- 1
+while (i <= 3) {
+  print(i)
+  i <- i + 1
+}
+```
+
+
+```{r}
+j <- 1
+repeat {
+  print(j)
+  if (j == 4) break
+  j <- j + 1
+}
+```
+
+```{r}
+macierz_3x3 <- matrix(1:9, nrow = 3, byrow = TRUE)
+suma_wierszy <- apply(macierz_3x3, 1, sum)
+suma_kolumn <- apply(macierz_3x3, 2, sum)
+```
+
+# Zadanie 7: Funkcje wejścia/wyjścia
+```{r}
+produkty <- data.frame(produkt = c("Mleko", "Chleb", "Masło"),
+                       cena = c(2.5, 3.0, 4.5),
+                       ilosc = c(10, 20, 15))
+write.csv(produkty, "produkty.csv", row.names = FALSE)
+
+produkty_nowe <- read.csv("produkty.csv")
+
+writeLines(c("To jest pierwszy wiersz.", "To jest drugi wiersz."), "notatka.txt")
+notatka <- readLines("notatka.txt")
+```
+
+# Zadanie 8: Funkcje związane z łańcuchami znaków
+```{r}
+tekst <- "R jest super!"
+dlugosc <- nchar(tekst)
+```
+
+```{r}
+podlancuch <- substr(tekst, 8, 12)
+podzielony <- strsplit("A-B-C-D", split = "-")[[1]]
+zamieniony <- sub("koty", "psy", "Kocham koty")
+```
+
+#Zadamie 9: Funkcje statystyczne i probabilistyczne
+```{r}
+set.seed(42)
+losowe <- rnorm(100, mean = 0, sd = 1)
+hist(losowe)
+test_t <- t.test(c(3, 5, 7, 9), c(2, 4, 6, 8))
+```
+
+#Zadanie 10: Tworzenie własnych funkcji
+```{r}
+pomnoz <- function(a, b) a * b
+wynik_pomnozenia <- pomnoz(7, 8)
+srednia_w_grupach <- function(dane, grupy) tapply(dane, grupy, mean)
+```
+
+# Zadanie 11: Przekształcenia typów danych
+```{r}
+wartosci_tekstowe <- c("10", "20", "30")
+liczby <- as.numeric(wartosci_tekstowe)
+liczby <- c(5, 10, 15)
+tekst <- as.character(liczby)
+odpowiedzi <- c("tak", "nie", "tak")
+czynniki <- factor(odpowiedzi)
+```
+
+# Zadanie 12: Funkcje dotyczące dat i czasu
+```{r}
+data <- Sys.Date()
+czas <- Sys.time()
+data1 <- as.Date("2024-01-01")
+data2 <- as.Date("2024-12-31")
+roznica_dni <- data2 - data1
+formatowana_data <- format(Sys.Date(), "%d-%m-%Y")
+```
+
+# Zadanie 13: Losowanie i premutacje 
+```{r}
+literki <- c("A", "B", "C", "D", "E")
+wylosowane <- sample(literki, 2, replace = FALSE)
+
+set.seed(42)
+wylosowane_z_seed <- sample(literki, 2, replace = FALSE)
+
+permutacja <- sample(1:6)
+```
+
+
