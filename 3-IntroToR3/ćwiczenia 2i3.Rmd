@@ -1,0 +1,764 @@
+---
+title: "Ćwiczenia 2"
+author: "Julia"
+date: "2024-11-18"
+output: html_document
+---
+
+# *Zadania treningowe z R base*
+
+## Część 1: Podstawowe operacje matematyczne
+
+1.  Oblicz pole trójkąta o podstawie 10 i wysokości 5, używając operatora mnożenia.
+
+```{r}
+podstawa <- 10
+wysokosc <- 5
+pole_trojkata <- (podstawa * wysokosc) / 2
+```
+
+2.  Znajdź resztę z dzielenia 256 przez 7 oraz wynik dzielenia całkowitego.
+
+```{r}
+reszta <- 256 %% 7
+dzielenie_calkowite <- 256 %/% 7
+```
+
+3.  Oblicz wartość wyrażenia
+
+```{r}
+wynik <- exp(log(5))
+```
+
+4.  Zaokrąglij liczbę 7,895 do najbliższej liczby całkowitej: w górę i w dół.
+
+```{r}
+liczba <- 7.895
+zaokraglona_gora <- ceiling(liczba)
+zaokraglona_dol <- floor(liczba)
+```
+
+5.  Oblicz wartość funkcji tangens dla kąta 45∘
+
+```{r}
+kat_stopnie <- 45
+kat_radiany <- kat_stopnie * pi / 180
+tangens <- tan(kat_radiany)
+```
+
+6.  Oblicz wyrażenie
+
+```{r}
+wynik <- sqrt(3^2 + 4^2)
+```
+
+## Część 2: Funkcje statystyczne
+
+1.  Dla wektora danych [2,4,6,8,10] oblicz średnią arytmetyczną, medianę oraz wariancję.
+
+```{r}
+wektor <- c(2, 4, 6, 8, 10)
+srednia <- mean(wektor)
+mediana <- median(wektor)
+wariancja <- var(wektor)
+```
+
+2.  Stwórz wektor z 50 losowych liczb z przedziału od 1 do 100. Znajdź wartość minimalną, maksymalną oraz sumę wszystkich elementów.
+
+```{r}
+set.seed(123)  
+wektor <- sample(1:100, 50)
+min_wartosc <- min(wektor)
+max_wartosc <- max(wektor)
+suma <- sum(wektor)
+```
+
+3.  Dla wektora danych $[3, 7, 7, 7, 2, 2, 5]$ utwórz tabelę częstości występowania każdej wartości.
+
+```{r}
+wektor <- c(3, 7, 7, 7, 2, 2, 5)
+tabela_czestosci <- table(wektor)
+```
+
+4.  Oblicz korelację i kowariancję między danymi $x = [1, 3, 5, 7, 9]$ i $y = [2, 6, 10, 14, 18]$.
+
+```{r}
+x <- c(1, 3, 5, 7, 9)
+y <- c(2, 6, 10, 14, 18)
+korelacja <- cor(x, y)
+kowariancja <- cov(x, y)
+```
+
+5.  Użyj funkcji `summary()` do podsumowania danych z ramki danych zawierającej informacje o wieku i wysokości pięciu osób.
+
+```{r}
+dane <- data.frame(
+  wiek = c(25, 30, 22, 40, 28),
+  wysokosc = c(170, 180, 160, 175, 165)
+)
+summary(dane)
+```
+
+6.  Oblicz iloczyn wszystkich liczb w wektorze $[1, 2, 3, 4, 5]$.
+
+```{r}
+wektor <- c(1, 2, 3, 4, 5)
+iloczyn <- prod(wektor)
+```
+
+## Część 3: Operacje na wektorach i indeksowanie
+
+1.  Stwórz wektor zawierający liczby od 0 do 1 z krokiem 0,1.
+
+```{r}
+wektor <- seq(0, 1, by = 0.1)
+```
+
+2.  Dla wektora $[2, 4, 6, 8, 10]$ wybierz drugi i czwarty element.
+
+```{r}
+wektor <- c(2, 4, 6, 8, 10)
+elementy <- wektor[c(2, 4)]
+```
+
+3.  Znajdź wszystkie elementy wektora $[5, 3, 8, 1, 9]$ większe niż 4.
+
+```{r}
+wektor <- c(5, 3, 8, 1, 9)
+elementy <- wektor[wektor > 4]
+```
+
+4.  Posortuj wektor $[5, 2, 8, 3, 7]$ malejąco i podaj indeksy sortowania.
+
+```{r}
+wektor <- c(5, 2, 8, 3, 7)
+sortowany <- sort(wektor, decreasing = TRUE)
+indeksy <- order(wektor, decreasing = TRUE)
+```
+
+5.  Oblicz rangi elementów wektora $[50, 20, 30, 40, 10]$.
+
+```{r}
+wektor <- c(50, 20, 30, 40, 10)
+rangi <- rank(wektor)
+```
+
+6.  Stwórz wektor powtarzający sekwencję $[1, 2, 3]$ trzy razy.
+
+```{r}
+wektor <- rep(c(1, 2, 3), times = 3)
+```
+
+## Część 4: Praca z ramkami danych (data frames)
+
+1. Utwórz ramkę danych zawierającą informacje o produktach: nazwa (tekst), cena (liczba), ilość (liczba całkowita).
+```{r}
+produkty <- data.frame(
+  nazwa = c("Mleko", "Chleb", "Masło"),
+  cena = c(4.5, 3.2, 7.8),
+  ilosc = c(10, 20, 5)
+)
+```
+
+
+2. Wyświetl kolumnę `'nazwa'` z ramki danych produktów.
+```{r}
+produkty$nazwa
+```
+
+
+3. Dodaj nową kolumnę `'wartość'` obliczaną jako cena pomnożona przez ilość.
+```{r}
+produkty$wartosc <- produkty$cena * produkty$ilosc
+```
+
+
+4. Usuń kolumnę `'ilość'` z ramki danych.
+```{r}
+produkty$ilosc <- NULL
+```
+
+
+5. Wyświetl strukturę ramki danych za pomocą funkcji `str()`.
+```{r}
+str(produkty)
+```
+
+6. Podaj nazwy kolumn i wierszy w ramce danych.
+```{r}
+kolumny <- colnames(produkty)
+wiersze <- rownames(produkty)
+```
+
+## Część 5: Funkcje logiczne i warunkowe
+1. Sprawdź, czy liczba 7 jest większa od 5 i mniejsza od 10.
+```{r}
+wynik <- 7 > 5 & 7 < 10
+```
+
+
+2. Dla wektora $[-3, 0, 5]$ użyj funkcji `ifelse()`, aby przypisać "Dodatnia", "Zero" lub "Ujemna" do każdego elementu.
+```{r}
+wektor <- c(-3, 0, 5)
+klasyfikacja <- ifelse(wektor > 0, "Dodatnia", ifelse(wektor == 0, "Zero", "Ujemna"))
+```
+
+
+3. Sprawdź, czy jakikolwiek element wektora $[FALSE, FALSE, TRUE]$ jest prawdziwy.
+```{r}
+wektor <- c(FALSE, FALSE, TRUE)
+czy_prawdziwy <- any(wektor)
+```
+
+
+4. Znajdź indeksy liczb parzystych w wektorze $[1, 2, 3, 4, 5, 6]$.
+```{r}
+wektor <- c(1, 2, 3, 4, 5, 6)
+parzyste_indeksy <- which(wektor %% 2 == 0)
+```
+
+
+5. Napisz instrukcję `if...else`, która sprawdzi, czy dana liczba jest podzielna przez 3.
+```{r}
+liczba <- 9
+if (liczba %% 3 == 0) {
+  print("Podzielna przez 3")
+} else {
+  print("Niepodzielna przez 3")
+}
+```
+
+
+6. Użyj operatora NOT, aby odwrócić wynik porównania $x == y$.
+```{r}
+x <- 5
+y <- 10
+negacja <- !(x == y)
+```
+
+
+# Część 6: Pętle i iteracje
+
+1. Napisz pętlę `for`, która wypisze liczby od 1 do 5.
+```{r}
+for (i in 1:5) {
+  print(i)
+}
+```
+
+
+2. Użyj pętli `while`, aby obliczyć silnię liczby 5.
+```{r}
+n <- 5
+silnia <- 1
+while (n > 0) {
+  silnia <- silnia * n
+  n <- n - 1
+}
+```
+
+
+3. Stwórz macierz $2 \times 5$ i za pomocą funkcji `apply()` oblicz sumę elementów w każdym wierszu.
+```{r}
+macierz <- matrix(1:10, nrow = 2, byrow = TRUE)
+suma_wierszy <- apply(macierz, 1, sum)
+```
+
+
+4. Użyj funkcji `sapply()` na liście $[1\!:\!3,\; 4\!:\!6,\; 7\!:\!9]$ do obliczenia sumy elementów każdej podlisty.
+```{r}
+lista <- list(1:3, 4:6, 7:9)
+suma <- sapply(lista, sum)
+```
+
+
+5. Napisz pętlę `repeat`, która będzie zwiększać zmienną $x$ o 2, aż $x$ przekroczy 10.
+```{r}
+x <- 0
+repeat {
+  x <- x + 2
+  if (x > 10) break
+}
+```
+
+
+6. Użyj funkcji `tapply()` do obliczenia średniej długości słów w grupach tekstów.
+```{r}
+teksty <- c("jeden", "dwa", "trzy", "cztery", "pięć")
+grupy <- c(1, 1, 2, 2, 2)
+srednia_dlugosc <- tapply(nchar(teksty), grupy, mean)
+```
+
+
+---
+
+## Część 7: Funkcje wejścia/wyjścia
+
+1. Załaduj ramkę danych z pliku `"studenci.csv"` i wyświetl jej strukturę.
+```{r}
+dane <- read.csv("C:/Users/pisko/Desktop/Ćwiczenia/studenci.csv")
+str(dane)
+```
+
+
+2. Zapisz ramkę danych do pliku `"dane_output.csv"` z nazwami wierszy.
+```{r}
+write.csv(dane, "dane_output.csv", row.names = TRUE)
+```
+
+
+3. Użyj funkcji `readLines()`, aby wczytać pierwsze 10 linii z pliku `"dokument.txt"`.
+```{r}
+linie <- readLines("dokument.txt", n = 10)
+```
+
+
+4. Napisz wektor $["Linia1", "Linia2", "Linia3"]$ do pliku `"linie.txt"` za pomocą `writeLines()`.
+```{r}
+linie <- c("Linia1", "Linia2", "Linia3")
+writeLines(linie, "linie.txt")
+```
+
+
+5. Sprawdź, czy plik `"dane.csv"` istnieje w bieżącym katalogu roboczym.
+```{r}
+plik_istnieje <- file.exists("dane.csv")
+```
+
+
+6. Ustaw katalog roboczy na `"C:/Użytkownicy/Jan/Dokumenty"`.
+```{r}
+setwd("C:/Użytkownicy/Jan/Dokumenty")
+```
+
+
+---
+
+## Część 8: Funkcje związane z łańcuchami znaków
+
+1. Użyj funkcji `paste()`, aby utworzyć zdanie "R jest wspaniały!".
+```{r}
+zdanie <- paste("R", "jest", "wspaniały!", sep = " ")
+zdanie
+```
+
+
+2. Znajdź długość łańcucha znaków "Analiza danych".
+```{r}
+dlugosc <- nchar("Analiza danych")
+dlugosc
+```
+
+
+3. Zamień wszystkie litery w tekście "Witaj Świecie" na duże litery.
+```{r}
+tekst <- toupper("Witaj Świecie")
+tekst
+```
+
+
+4. Sprawdź, które elementy wektora $["jabłko", "banan", "gruszka"]$ zawierają literę "a".
+```{r}
+wektor <- c("jabłko", "banan", "gruszka")
+zawiera_a <- grepl("a", wektor)
+zawiera_a
+```
+
+
+5. W tekście "To jest stary komputer" zamień "stary" na "nowy", używając funkcji `sub()
+```{r}
+tekst <- sub("stary", "nowy", "To jest stary komputer")
+tekst
+```
+
+
+6. Podziel zdanie "Uczę się języka R" na słowa.
+```{r}
+slowa <- strsplit("Uczę się języka R", " ")
+slowa
+```
+
+---
+
+## Część 9: Funkcje statystyczne i probabilistyczne
+
+1. Wygeneruj 50 losowych liczb z rozkładu normalnego o średniej 10 i odchyleniu standardowym 2.
+```{r}
+liczby <- rnorm(50, mean = 10, sd = 2)
+liczby
+```
+
+
+2. Oblicz wartość dystrybuanty rozkładu normalnego w punkcie $x = 1$ dla średniej 0 i odchylenia 1.
+```{r}
+dystrybuanta <- pnorm(1, mean = 0, sd = 1)
+dystrybuanta
+```
+
+
+3. Znajdź wartość kwantyla $2{,}5\%$ rozkładu normalnego standardowego.
+```{r}
+kwantyl <- qnorm(0.025)
+kwantyl
+```
+
+
+4. Przeprowadź jednostronny test t-Studenta sprawdzający, czy średnia próby jest większa od 0.
+```{r}
+proba <- rnorm(10)
+test <- t.test(proba, mu = 0, alternative = "greater")
+test
+```
+
+
+5. Narysuj histogram dla wygenerowanych danych z rozkładu normalnego.
+```{r}
+hist(liczby, main = "Histogram danych", xlab = "Wartości", col = "blue")
+```
+
+
+6. Oblicz gęstość rozkładu normalnego w punktach od $-3$ do $3$ z krokiem $0{,}5$.
+```{r}
+x <- seq(-3, 3, by = 0.5)
+gestosc <- dnorm(x)
+gestosc
+```
+
+
+---
+
+## Część 10: Funkcje systemowe i diagnostyczne
+
+1. Wyświetl bieżący katalog roboczy.
+```{r}
+getwd()
+```
+
+
+2. Zmień katalog roboczy na folder "Projekt".
+```{r}
+dir.create("Projekt")
+setwd("Projekt")
+```
+
+
+3. Użyj funkcji `help.search()`, aby znaleźć informacje o funkcji mediany.
+```{r}
+help.search("median")
+```
+
+
+4. Wyświetl przykłady użycia funkcji `summary()`.
+```{r}
+example(summary)
+```
+
+
+5. Usuń wszystkie obiekty z bieżącego środowiska.
+```{r}
+rm(list = ls())
+```
+
+6. Zmierz czas wykonania funkcji `sort()` dla wektora 1 000 000 losowych liczb.
+```{r}
+wektor <- sample(1:1000000)
+czas <- system.time(sort(wektor))
+czas
+```
+
+
+---
+
+## Część 11: Tworzenie własnych funkcji
+
+1. Zdefiniuj funkcję `kwadrat`, która podnosi liczbę do kwadratu.
+```{r}
+kwadrat <- function(x) {
+  wynik <- x^2
+  return(wynik)
+}
+```
+
+
+2. Napisz funkcję `suma_wektora`, która oblicza sumę elementów wektora.
+```{r}
+suma_wektora <- function(wektor) {
+  return(sum(wektor))
+}
+```
+
+
+3. Utwórz funkcję `maksimum`, która zwraca największy z trzech podanych argumentów.
+```{r}
+maksimum <- function(a, b, c) {
+  return(max(a, b, c))
+}
+```
+
+
+4. Napisz funkcję `czy_podzielna`, która sprawdza, czy liczba jest podzielna przez 3 i 5.
+```{r}
+czy_podzielna <- function(liczba) {
+  return(liczba %% 3 == 0 & liczba %% 5 == 0)
+}
+```
+
+
+5. Stwórz funkcję `przeksztalc`, która zamienia wszystkie litery w tekście na małe.
+```{r}
+przeksztalc <- function(tekst) {
+  return(tolower(tekst))
+}
+```
+
+
+6. Zdefiniuj funkcję `pole_trojkata`, która oblicza pole trójkąta na podstawie długości boków, używając wzoru Herona.
+```{r}
+pole_trojkata <- function(a, b, c) {
+  s <- (a + b + c) / 2
+  return(sqrt(s * (s - a) * (s - b) * (s - c)))
+}
+```
+
+
+---
+
+## Część 12: Przekształcenia typów danych
+
+1. Przekształć wektor znakowy $["10", "20", "30"]$ na liczbowy i oblicz ich średnią.
+```{r}
+wektor <- c("10", "20", "30")
+wektor_num <- as.numeric(wektor)
+srednia <- mean(wektor_num)
+srednia
+```
+
+
+2. Zamień wektor liczbowy $[5, 10, 15]$ na czynnik.
+```{r}
+wektor <- c(5, 10, 15)
+wektor_factor <- as.factor(wektor)
+wektor_factor
+```
+
+
+3. Sprawdź, jaki typ danych ma wynik funkcji `as.character(123)`.
+```{r}
+typ_danych <- typeof(as.character(123))
+typ_danych
+```
+
+
+4. Dla wektora $["Prawda", "Fałsz"]$ spróbuj przekonwertować go na wartości logiczne.
+```{r}
+wektor <- c("Prawda", "Fałsz")
+wektor_logiczny <- as.logical(wektor)
+wektor_logiczny
+```
+
+
+5. Przekształć macierz $2 \times 2$ w ramkę danych.
+```{r}
+macierz <- matrix(1:4, nrow = 2, ncol = 2)
+ramka_danych <- as.data.frame(macierz)
+ramka_danych
+```
+
+
+6. Sprawdź, czy wektor $[1, 2, "3"]$ jest liczbowy po konwersji.
+```{r}
+wektor <- c(1, 2, "3")
+wektor_num <- as.numeric(wektor)
+is.numeric(wektor_num)
+```
+
+
+---
+
+## Część 13: Funkcje dotyczące dat i czasu
+
+1. Wyświetl aktualną datę i czas.
+```{r}
+Sys.time()
+```
+
+
+2. Zamień tekst "01/01/2023" na datę w formacie R.
+```{r}
+data <- as.Date("01/01/2023", format = "%d/%m/%Y")
+data
+```
+
+
+3. Oblicz liczbę dni między dzisiejszą datą a Twoimi urodzinami.
+```{r}
+urodziny <- as.Date("2000-04-13")
+dzis <- Sys.Date()
+roznica <- as.numeric(dzis - urodziny)
+roznica
+
+```
+
+
+4. Sformatuj bieżący czas w formacie "godzina:minuta:sekunda".
+```{r}
+format(Sys.time(), "%H:%M:%S")
+```
+
+
+5. Sprawdź, jaki dzień tygodnia przypada na datę "2023-11-11".
+```{r}
+dzien_tygodnia <- weekdays(as.Date("2023-11-11"))
+dzien_tygodnia
+```
+
+
+6. Dodaj 30 dni do dzisiejszej daty i wyświetl wynik.
+```{r}
+nowa_data <- Sys.Date() + 30
+nowa_data
+```
+
+
+---
+
+## Część 14: Losowanie i permutacje
+
+1. Wylosuj 6 liczb z przedziału od 1 do 49 (jak w Lotto).
+```{r}
+sample(1:49, 6)
+```
+
+
+2. Ustaw ziarno na 123 i wygeneruj losowy wektor 5 liczb całkowitych od 1 do 100.
+```{r}
+set.seed(123)
+sample(1:100, 5)
+```
+
+
+3. Wymieszaj kolejność liter w słowie "PROGRAM".
+```{r}
+sample(unlist(strsplit("PROGRAM", "")))
+```
+
+
+4. Wylosuj z powtórzeniami 4 elementy z wektora $["X", "Y", "Z"]$.
+```{r}
+sample(c("X", "Y", "Z"), 4, replace = TRUE)
+```
+
+
+5. Porównaj dwa losowania z tym samym ziarnem i upewnij się, że wyniki są identyczne.
+```{r}
+set.seed(123)
+losowanie1 <- sample(1:10, 5)
+
+set.seed(123)
+losowanie2 <- sample(1:10, 5)
+
+identyczne <- all(losowanie1 == losowanie2)
+identyczne
+
+```
+
+
+6. Stwórz losową permutację wektora liczbowego od 1 do 20.
+```{r}
+sample(1:20)
+```
+
+---
+
+## Część 15: Inne przydatne funkcje
+
+1.  Wygeneruj sekwencję liczb od 1 do 100 co 5.
+```{r}
+seq(1, 100, by = 5)
+```
+
+
+2.  Użyj funkcji `sample()`, aby stworzyć losową permutację liczb od 1 do 10.
+```{r}
+sample(1:10)
+```
+
+
+3.  Zastosuj funkcję `length()` do każdego elementu listy $["kot", "pies", "słoń"]$, używając `lapply()`.
+```{r}
+lapply(c("kot", "pies", "słoń"), nchar)
+
+```
+
+
+4.  Oblicz średnią wartość dla każdej kolumny w ramce danych za pomocą `sapply()`.
+```{r}
+ramka <- data.frame(a = c(1, 2, 3), b = c(4, 5, 6))
+sapply(ramka, mean)
+
+```
+
+
+5.  Stwórz listę zawierającą trzy wektory liczbowe i oblicz sumę elementów każdego z nich.
+```{r}
+lista <- list(c(1, 2, 3), c(4, 5, 6), c(7, 8, 9))
+lapply(lista, sum)
+```
+
+
+6.  Wygeneruj sekwencję liczb od 10 do 1, używając funkcji `seq()`.
+```{r}
+seq(10, 1, by = -1)
+```
+
+
+---
+
+## Część 16: Profilowanie i debugowanie
+
+1.  Włącz debugowanie funkcji `suma_wektora` i sprawdź, jak działa z błędnymi danymi.
+```{r}
+debug(suma_wektora)
+
+suma_wektora(c(1, 2, "trzy"))
+```
+
+
+2.  Użyj funkcji `traceback()` po otrzymaniu błędu w skrypcie.
+```{r}
+suma_wektora("trzy")
+traceback()
+```
+
+
+3.  Ustaw opcję `error` na `recover` i zobacz, co się stanie po wystąpieniu błędu.
+```{r}
+options(error = recover)
+```
+
+
+4.  Wyłącz debugowanie funkcji `suma_wektora`.
+```{r}
+undebug(suma_wektora)
+```
+
+
+5.  Znajdź i popraw błąd w funkcji, która nie zwraca oczekiwanego wyniku.
+
+
+6.  Użyj funkcji `options()`, aby zresetować ustawienia błędów do domyślnych.
+```{r}
+options(error = NULL)
+```
+
+
+
+
+
+
+
+
+
+
+
+
