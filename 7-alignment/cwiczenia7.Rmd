@@ -1,0 +1,121 @@
+---
+title: "ćwiczenia7"
+author: "Julia"
+date: "2024-11-19"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+# ***MAPOWANIE DO GENOMU REFERENCYJNEGO***
+
+## Zadanie 1: Przygotowanie danych sekwencyjnych
+
+```{r}
+install.packages("BiocManager")
+BiocManager::install("ShortRead")
+library(ShortRead)
+```
+
+```{r}
+setwd("C:/Users/pisko/Desktop/cwiczenia_7")
+```
+
+1.  Importowanie pliku FastQ
+
+```{r}
+fq1 <- readFastq("C:/Users/pisko/Desktop/cwiczenia_7/SRR31368982.fastq")
+```
+
+2.  Analiza jakości
+
+```{r}
+qa_result <- qa("C:/Users/pisko/Desktop/cwiczenia_7/SRR31368982.fastq")
+report(qa_result, dest="C:/Users/pisko/Desktop/cwiczenia_7/QA_Report")
+```
+
+## Zadanie 2: Przygotowanie genomu referencyjnego
+
+1.  Pobranie genomu referencyjnego
+
+```{r}
+download.file("ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/005/845/GCA_000005845.2_ASM584v2/GCA_000005845.2_ASM584v2_genomic.fna.gz",
+              destfile = "C:/Users/pisko/Desktop/cwiczenia_7/ecoli_genome.fna.gz")
+```
+
+2.  Import genomu referencyjnego do R
+
+```{r}
+library(Biostrings)
+
+ref_genome <- readDNAStringSet("C:/Users/pisko/Desktop/cwiczenia_7/ecoli_genome.fna.gz")
+```
+
+## Zadanie 3: Indeksowanie genomu referencyjnego
+
+1.  Budowanie indeksu genomu
+
+```{r}
+library(Rsubread)
+
+buildindex(basename = "ecoli_index", reference = "C:/Users/pisko/Desktop/cwiczenia_7/ecoli_genome.fna.gz")
+```
+
+2.  Analiza wyników indeksowania
+
+## Zadanie 4: Mapowanie odczytów do genomu referencyjnego
+
+1.  Wykonanie mapowania
+
+```{r}
+align(index = "ecoli_index",
+      readfile1 = "C:/Users/pisko/Desktop/cwiczenia_7/SRR31368982.fastq",
+      input_format = "FASTQ",
+      output_file = "C:/Users/pisko/Desktop/cwiczenia_7/aligned_sample.BAM")
+```
+
+2.  Wstępna analiza wyników mapowania
+
+## Zadanie 5: Analiza wyników mapowania
+
+1.  Import zmapowanych odczytów
+
+```{r}
+library(GenomicAlignments)
+
+aln <- readGAlignments("C:/Users/pisko/Desktop/cwiczenia_7/aligned_sample.BAM")
+```
+
+2.  Obliczenie pokrycia genomu
+
+```{r}
+coverage_data <- coverage(aln)
+coverage_data
+```
+
+2.1 średnie pokrycie
+
+```{r}
+mean(cov_df$value)
+```
+
+3.  Wizualizacja pokrycia
+
+```{r}
+library(ggplot2)
+
+# Konwersja pokrycia do data frame
+cov_df <- as.data.frame(coverage_data[[1]])
+cov_df$position <- as.numeric(rownames(cov_df))
+
+# Wykres pokrycia
+pdf("C:/Users/pisko/Desktop/cwiczenia_7/wizualizacja_pokrycia.pdf", width = 8, height = 6)
+
+ggplot(cov_df[1:25000, ], aes(x = position, y = value)) +
+  geom_line(color = "blue") +
+  labs(title = "Pokrycie genomu E. coli",
+       x = "Pozycja w genomie",
+       y = "Liczba zmapowanych odczytów")
+       
+dev.off()
+```
