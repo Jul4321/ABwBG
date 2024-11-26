@@ -1,0 +1,261 @@
+---
+title: "Kolokwium- Analiza danych sekwencyjnych"
+author: "Julia"
+date: "2024-11-26"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Zaliczenie 1
+
+## ***Celem analizy było zmapowanie sekwencji Escherichia coli do genomu referencyjnego,wcześniej dokonując preprocessingu danych sekwencyjnych.***
+
+## Analiza jakości sekwencji E.coli oraz generowanie raportu jakości.
+
+**Instalacja i ładowanie niezbędnych pakietów**
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install(c("ShortRead", "Rqc", "Biostrings"))
+
+library(ShortRead)
+library(Rqc)
+library(Biostrings)
+```
+
+**wczytanie pliku z sekwencą E.coli do R**
+
+```{r}
+fq_file <- "C:/Users/pisko/Desktop/kolos/ecoli_raw.fq"
+fq_reads <- readFastq(fq_file)
+```
+
+**Sprawdzenie podstawowych informacji w wczytanej sekwencji E.coli-** między innymi takich jak liczba odczytów czy pierwsze kilka odczytów w celu upewnienia się że dane zostały poprawnie zaiportowane do programu
+
+```{r}
+length(fq_reads)
+fq_reads[1:5]
+```
+
+### Generowanie raportu QC niezmienionej sekwencji E.coli
+
+*Szczegółowy opis raportu znajduje się w załączniku "Raport-zaliczenie"*
+
+```{r}
+qa_results <- qa(fq_file, type = "fastq")
+report(qa_results, dest = "C:/Users/pisko/Desktop/kolos/QA_report-ecoli_raw.html")
+```
+
+## Przycinanie i filtracja odczytów na podstawie jakości
+
+**Ustalenie wartość Phred dla progu jakości**
+
+```{r}
+phred_threshold <- 20
+```
+
+**Obliczenie symbolu jakości dla Phred+33**
+
+```{r}
+quality_symbol <- intToUtf8(phred_threshold + 33)
+symbol <- intToUtf8(20 + 33)
+```
+
+**Przycięcie odczytów**
+
+```{r}
+ fq_reads
+  k = 2               # Liczba kolejnych baz o jakości poniżej progu.
+  a = "5"             # znak jakości odpowiadający progu Phred20
+  halfwidth = 1       # Połowa szerokości okna średniej ruchomej
+
+trimmed_reads <- trimTailw
+  
+trimmed_reads <- trimTailw(fq_reads, k = 2, a = "5", halfwidth = 1)  
+```
+
+**Określenie jaka ilość sekwencji została przycięta**
+
+```{r}
+sum(width(trimmed_reads) < width(fq_reads))
+```
+
+**Filtracja odczytów o niskiej jakości**
+
+```{r}
+filtered_reads <- trimmed_reads[width(trimmed_reads) >= 50]
+length(trimmed_reads)  #po przycięciu
+length(filtered_reads) #po filtracji
+```
+
+**określenie procentu oczytów odrzuconych podczas filtracji**
+
+```{r}
+FilteredSeq <- (1-291316/299809)*100
+FilteredSeq
+```
+
+### Generowanie raportu oceny jakości danych po przycinaniu i filtracji w celu sprawdzenia jak filtracja i przycinanie wpłyneły na jakość danych.
+
+*Wygenerowany raport opisany jest w dokumencie word "Raport-zaliczenie"*
+
+```{r}
+writeFastq(filtered_reads, "C:/Users/pisko/Desktop/kolos/e.coli_processed.fastq.gz")
+qa_results_processed <- qa("C:/Users/pisko/Desktop/kolos/e.coli_processed.fastq.gz", type = "fastq")
+report(qa_results_processed, dest = "C:/Users/pisko/Desktop/kolos/QA_report_e.coli_processed.html")
+```
+
+## Analiza rozkładu długości odczytów
+
+```{r}
+# Przed przycinaniem
+hist(width(fq_reads), breaks = 50, main = "Długość odczytów przed przycinaniem", xlab = "Długość (bp)")
+
+# Po przycinaniu
+hist(width(filtered_reads), breaks = 50, main = "Długość odczytów po przycinaniu", xlab = "Długość (bp)")
+```
+
+## Zawartość GC dla orginalnych odczytów
+
+```{r}
+gc_content <- letterFrequency(sread(fq_reads), letters = "GC", as.prob = TRUE)
+hist(gc_content, breaks = 50, main = "Zawartość GC w oryginalnych odczytach", xlab = "Procent GC")
+```
+
+## Zawartość GC dla przetworzonych danych
+
+```{r}
+gc_content <- letterFrequency(sread(filtered_reads), letters = "GC", as.prob = TRUE)
+hist(gc_content, breaks = 50, main = "Zawartość GC w przetworzonych odczytach", xlab = "Procent GC")
+```
+
+## Wykrywanie i usuwanie sekwencji adapterów
+
+**Zdefiniowanie oraz wyszukanie sekwencji adapterów w odczytach. Usuwanie możliwych obecnych adapterów w sekwencji**
+
+```{r}
+
+adapter_seq <- DNAString("AGATCGGAAGAGC")
+trimmed_reads_adapt <- trimLRPatterns(
+  Lpattern = adapter_seq,
+  subject = filtered_reads
+)
+
+filtered_reads <- trimmed_reads_adapt
+```
+
+### Określenie efektów przycinania adapterów
+
+**Porównanie długości przed i po przycięciu adapterów:**
+
+```{r}
+length(filtered_reads)  #przed przycięciem adapterów
+length(trimmed_reads_adapt)  #po przycięciu adapterów
+```
+
+**sprawdzenie ilości zmodyfikowanych odczytów**
+
+```{r}
+sum(width(filtered_reads) < width(trimmed_reads))
+```
+
+## Wygenerowanie ostatecznego raportu po przycięciu adaptorów.
+
+*Analiza raportu dostępna w pliku word "Raport-zaliczenie"*
+
+```{r}
+writeFastq(filtered_reads, "C:/Users/pisko/Desktop/kolos/ecoli_final_raport.fq")
+qa_results_final <- qa("C:/Users/pisko/Desktop/kolos/ecoli_final_raport.fq", type = "fastq")
+report(qa_results_final, dest = "C:/Users/pisko/Desktop/kolos/ecoli_final_raport.html")
+```
+
+# MAPOWANIE
+
+**Pobieranie genomu referencyjnego E.coli**
+
+```{r}
+download.file("ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/005/845/GCA_000005845.2_ASM584v2/GCA_000005845.2_ASM584v2_genomic.fna.gz",
+              destfile = "C:/Users/pisko/Desktop/kolos/ecoli_referencyjny.fna.gz")
+```
+
+**Importowanie genomu referencyjnego do R**
+
+```{r}
+ref_genome <- readDNAStringSet("C:/Users/pisko/Desktop/kolos/ecoli_referencyjny.fna.gz")
+```
+
+**Indeksowanie genomu referencyjnego (budowanie indeksu genomu)**
+
+```{r}
+library(Rsubread)
+
+setwd("C:/Users/pisko/Desktop/kolos")
+
+buildindex(basename = "ecoli_index", reference = "C:/Users/pisko/Desktop/kolos/ecoli_referencyjny.fna.gz")
+```
+
+**Mapowanie odczytów do genomu referencyjnego**
+
+```{r}
+align(index = "ecoli_index",
+      readfile1 = "C:/Users/pisko/Desktop/kolos/ecoli_final_raport.fq",
+      input_format = "FASTQ",
+      output_file = "C:/Users/pisko/Desktop/kolos/aligned_sample.BAM")
+```
+
+## Analiza wyników mapowania
+
+**Import zmapowanych odczytów**
+
+```{r}
+library(GenomicAlignments)
+
+aln <- readGAlignments("C:/Users/pisko/Desktop/kolos/aligned_sample.BAM")
+```
+
+**Obliczenie pokrycia genomu**
+
+```{r}
+coverage_data <- coverage(aln)
+coverage_data
+```
+
+**średnia pokrycia**
+
+```{r}
+mean(cov_df$value)
+```
+
+**Procent zmapowanych odczytów**
+
+```{r}
+total_reads <-291316
+mapped_reads <-291232
+procent_mapped <- (mapped_reads / total_reads)*100
+
+cat("Procent zmapowanych odczytów:", percent_mapped, "%")
+```
+
+## Wizualizacja pokrycia
+
+```{r}
+library(ggplot2)
+
+# Konwersja pokrycia do data frame
+cov_df <- as.data.frame(coverage_data[[1]])
+cov_df$position <- as.numeric(rownames(cov_df))
+
+# Wykres pokrycia
+pdf("C:/Users/pisko/Desktop/kolos/pliku.pdf", width = 8, height = 6)
+
+ggplot(cov_df[1:25000, ], aes(x = position, y = value)) +
+  geom_line(color = "red") +
+  labs(title = "Pokrycie genomu E. coli",
+       x = "Pozycja w genomie",
+       y = "Liczba zmapowanych odczytów")
+  theme_minimal()
+
+```
