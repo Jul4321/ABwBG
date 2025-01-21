@@ -67,6 +67,8 @@ Ocena pokrycia genomu jest kolejnym ważnym krokiem w analizie jakości danych. 
 
 Analiza rozkładu pokrycia za pomocą wizualizacji, np. wykresu wygenerowanego przez `plot(coverage_data)`, umożliwia ocenę jakości procesu sekwencjonowania. Regiony genomu o wysokim pokryciu mogą wskazywać na obecność artefaktów lub sekwencji powtarzalnych, które mogą wymagać dalszego zbadania. Z kolei niskie pokrycie może sugerować problemy z jakością danych lub z technologią sekwencjonowania, co może prowadzić do utraty istotnych informacji w analizie.
 
+
+
 ## Zadanie 5: Wykrywanie wariantów
 
 ***5.1 Definiowanie parametrów skanowania za pomocą `pileup()`***
