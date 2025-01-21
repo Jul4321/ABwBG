@@ -1,6 +1,7 @@
 # Data visualization - techniki wizualizacji danych
 
 ## Wprowadzenie
+
 Wizualizacja danych jest kluczowym etapem analizy danych, umożliwiającym odkrywanie wzorców, zależności i rozkładów w zbiorach danych. 
 W tym opracowaniu omówione zostaną różne typy wykresów, które są powszechnie stosowane w badaniach naukowych i analizie danych.
 
@@ -61,9 +62,11 @@ Wykresy czasowe pomagają analizować zmiany w danych w kontekście upływu czas
 Wykres wodospadowy jest wykorzystywany w genomice do przedstawiania zmian w ekspresji genów w różnych próbach, takich jak różnice w poziomach ekspresji między nowotworami a tkankami zdrowymi.
 
 ***5.1 Klasyczny Waterfall Plot***
+
 ![klasyczny_Waterfall Plot](https://github.com/user-attachments/assets/d1cc9ef5-492a-4b22-a765-9cff3e2c9dff)
 
 ***5.2 Waterfall w analizach mutacji***
+
 ![Waterfall w analizach mutacji](https://github.com/user-attachments/assets/cc262534-6d2a-438e-8567-ff2aadd1c7e0)
 
 ### 6. Volcano Plot
@@ -71,14 +74,17 @@ Wykres wodospadowy jest wykorzystywany w genomice do przedstawiania zmian w eksp
 Wykres wulkanowy jest szczególnie popularny w genomice, zwłaszcza w analizach RNA-Seq, do przedstawiania wyników analizy różnicowej ekspresji genów. Umożliwia wizualizację istotnych różnic w ekspresji genów przy jednoczesnym uwzględnieniu ich poziomów statystycznej istotności.
 
 ***6.1 Metoda 1: base R***
+
 ![Volcano Plot_baseR](https://github.com/user-attachments/assets/18df4548-1e90-44e2-9575-75f1a3dce474)
 
 
 ***6.2 Metoda 2: pakiet EnhancedVolcano***
+
 ![VolcanoPlot_pakiet EnhancedVolcano](https://github.com/user-attachments/assets/967f75a3-6b55-4559-9311-66bd544ae109)
 
 
 ### 7. Heatmap
+
 Heatmap jest stosowana w genomice do przedstawiania danych z eksperymentów typu RNA-Seq, gdzie wartości ekspresji genów w różnych próbach są przedstawiane za pomocą kolorów, co umożliwia łatwe dostrzeganie wzorców ekspresji.
 
 ![heatmap](https://github.com/user-attachments/assets/d527e085-7a7a-4be6-b72f-43369931b877)
@@ -93,8 +99,53 @@ Redukcja wymiarów za pomocą PCA lub t-SNE pozwala na wizualizację dużych zbi
 ### 9. Manhattan Plot
 Wykres Manhattan jest szeroko stosowany w genomice do przedstawiania wyników badań skojarzeń genotypów z fenotypami, zwłaszcza w badaniach GWAS (Genome-Wide Association Studies), gdzie pokazuje istotność statystyczną wariantów genetycznych w kontekście ich lokalizacji na chromosomach.
 
-![Manhattan Plot](https://github.com/user-attachments/assets/f0d62215-0124-4419-90ac-9ac6b22a095f)
+![Manhattan Plot](https://github.com/user-attachments/assets/fdf7abcd-cd9b-461b-b05f-a0b246e04580)
+
 
 ### 10. Venn Diagrams i UpSet Plots
+
+***10.1 Venn Diagrams***
+
+Wykres Venna jest wykorzystywany w genomice do przedstawiania wspólnych i unikalnych genów lub mutacji w różnych grupach próbek, np. porównanie genów różniących się w zależności od stanu zdrowia.
+
+![Venn Diagrams](https://github.com/user-attachments/assets/e7df69cf-e4d3-47d5-be15-c79717d8bfa5)
+
+
+***10.2 UpSet Plots***
+
+UpSet Plot jest przydatny w genomice do analizy relacji między wieloma zbiorami danych, np. w analizach wariantów genotypów, gdzie może pokazać, jakie kombinacje mutacji występują w różnych grupach
+
+![UpSet Plot](https://github.com/user-attachments/assets/4d977f4c-ab62-4095-8047-cd5eb184ce21)
+
+### 11.  Pathway and Annotation Plots (np. KEGG)
+Wizualizacja ścieżek biologicznych jest szeroko wykorzystywana w genomice do przedstawiania interakcji genów w ramach określonych szlaków metabolicznych lub sygnalizacyjnych, co pomaga w zrozumieniu funkcji genów w kontekście zdrowia i chorób.
+
+### 12. Drzewo filogenetyczne
+
+Drzewo filogenetyczne jest wykresem przedstawiającym ewolucyjne pokrewieństwo między organizmami lub genami na podstawie ich cech. Drzewa takie są wykorzystywane w genomice do badania relacji między różnymi gatunkami na podstawie danych genetycznych. Umożliwiają identyfikację wspólnych przodków oraz badanie różnic między genomami różnych organizmów. W genomice stosuje się je do analizy filogenezy gatunków lub określania ewolucyjnych dróg rozwoju genów.
+
+![Drzewo filogenetyczne](https://github.com/user-attachments/assets/9322dbc8-9e77-4100-ac88-2653aed2072b)
+
+### 13. Synteny Plots (np. genoPlotR)
+
+Wykresy synteny przedstawiają podobieństwa i różnice w układzie genów między różnymi organizmami. W genomice są wykorzystywane do porównania struktur genomów różnych organizmów, pomagając w identyfikacji zachowanych regionów genowych. Synteny plots umożliwiają także wykrywanie rearrangamentów chromosomalnych i analizowanie ewolucyjnych zmian w organizmach na poziomie genomu.
+
+![Synteny Plots](https://github.com/user-attachments/assets/8341a5cc-e51a-4f9b-91f5-5c7e8188b59b)
+
+### 14. Circos Plots
+
+Wykresy Circos to zaawansowane wykresy okrężne, które umożliwiają wizualizację dużych zbiorów danych genomowych, takich jak interakcje między chromosomami, dane o strukturze genomu, czy relacje między różnymi zmiennymi. W genomice wykorzystywane są do prezentowania danych o strukturach chromosomów, takich jak duplikacje, delecje, czy inne zmiany w organizmach, a także do przedstawiania danych o interakcjach między różnymi regionami genomu.
+
+![Circos Plots](https://github.com/user-attachments/assets/4c853304-32cf-47a9-9545-790978119deb)
+
+### 15. Ideograms
+
+Ideogramy to graficzne przedstawienia chromosomów, zazwyczaj w postaci znormalizowanej mapy, na której można zaznaczać regiony o interesujących cechach. W genomice ideogramy są wykorzystywane do przedstawiania struktury genomu, lokalizacji genów, mutacji czy innych cech w kontekście chromosomów. Umożliwiają łatwe wskazanie lokalizacji specyficznych regionów genetycznych, takich jak loci mutacji lub regiony odpowiadające za choroby genetyczne.
+
+![Ideograms](https://github.com/user-attachments/assets/5860cddb-c74b-40c1-96e5-852a6cc21f9f)
+
+
+
+
 
 
