@@ -1,0 +1,104 @@
+---
+title: "Ćwiczenia 12"
+author: "Julia"
+date: "2025-01-07"
+output: html_document
+---
+
+# VariantAnnotation
+
+## Zadanie 0: Przygotowanie środowiska
+- Zainstalowanie i załadowanie pakietów `VariantAnnotation`, `GenomicRanges`, `AnnotationHub`.
+```{r}
+pakiety <- c("VariantAnnotation", "GenomicRanges", "AnnotationHub")
+BiocManager::install(pakiety)
+
+library(VariantAnnotation)
+library(GenomicRanges)
+library(AnnotationHub)
+```
+
+
+## Zadanie 1: Wczytanie i eksploracja danych
+  
+```{r}
+#wczytanie ścieżki do pliku dostarczonego przez pakiet VariantAnnotation.
+fl <- system.file("extdata", "chr22.vcf.gz", package="VariantAnnotation")
+
+#wczytanie pliku VCF, umożliwiając dalszą analize wariantów
+vcf <- readVcf(fl, "hg19")
+
+#podstawowe informacje o pliku, takie jak liczba wariantów i struktura danych.
+vcf
+```
+
+
+## Zadanie 2: Filtracja i analiza jakości
+
+```{r}
+#analiza jakości- sprawdzenie kolumnę `QUAL` w obiekcie `vcf`
+summary(qual(vcf))
+```
+
+```{r}
+#filtracja- Zachowywane są tylko te, które mają wartość jakości większą niż 99 i nie mają brakujących wartości.
+vcf_filtered <- vcf[!is.na(qual(vcf)) & qual(vcf) > 99, ]
+vcf_filtered
+summary(qual(vcf_filtered))
+```
+
+
+## Zadanie 3: Anotacja wariantów
+
+```{r}
+#Instalowany jest pakiet TxDb.Hsapiens.UCSC.hg19.knownGene, który zawiera adnotacje genowe dla referencyjnego genomu hg19. Tworzony jest obiekt txdb zawierający informacje o strukturze genów (np. eksony, introny, UTR-y).
+BiocManager::install("TxDb.Hsapiens.UCSC.hg19.knownGene")
+library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
+```
+
+```{r}
+gr <- rowRanges(vcf_filtered)
+
+loc_anno <- locateVariants(gr, txdb, AllVariants())
+head(loc_anno)
+```
+
+
+
+
+## Zadanie 4: Przykłady dalszej analizy
+
+```{r}
+# Filtracja wariantów w regionach UTR
+utr_variants <- loc_anno[loc_anno$LOCATION %in% c("fiveUTR", "threeUTR"), ]
+summary(utr_variants$LOCATION)
+
+# Filtracja wariantów międzygenowych
+intergenic_variants <- loc_anno[loc_anno$LOCATION == "intergenic", ]
+nrow(intergenic_variants)
+
+```
+
+
+
+```{r}
+# Liczba wariantów przed i po filtracji
+initial_variants <- length(rowRanges(vcf))
+filtered_variants <- length(rowRanges(vcf_filtered))
+
+# Liczba wariantów w regionach kodujących i międzygenowych
+coding_variants <- sum(loc_anno$LOCATION == "coding")
+intergenic_variants_count <- sum(loc_anno$LOCATION == "intergenic")
+
+# Wyświetlenie wyników
+cat("Podsumowanie wyników analizy:\n")
+cat("Liczba wariantów przed filtracją:", initial_variants, "\n")
+cat("Liczba wariantów po filtracji:", filtered_variants, "\n")
+cat("Warianty w regionach kodujących:", coding_variants, "\n")
+cat("Warianty w regionach międzygenowych:", intergenic_variants_count, "\n")
+
+```
+
+
+
