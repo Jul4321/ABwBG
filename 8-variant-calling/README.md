@@ -99,3 +99,12 @@ Za pomocą funkcji `filter()` z pakietu `dplyr`, warianty są filtrowane na pods
 
 Ostatecznym krokiem jest eksportowanie przefiltrowanych wyników do **pliku CSV**. Funkcja `write.csv()` pozwala na zapisanie danych w formacie tekstowym, który może być łatwo odczytany przez inne narzędzia do analizy danych.
 
+## Podsumowanie
+
+Wykrywanie wariantów genetycznych to proces, który wymaga precyzyjnej analizy danych sekwencyjnych i odpowiedniego przetwarzania bioinformatycznego.
+
+Kluczowymi czynnikami wpływającymi na dokładność tej analizy są jakość danych sekwencyjnych, głębokość pokrycia genomu, parametry ustawione podczas analizy oraz poprawność mapowania odczytów na genom referencyjny. Filtrowanie wykrytych wariantów jest istotnym etapem, ponieważ pozwala wyeliminować fałszywie pozytywne warianty, poprawia wiarygodność wyników i skupia analize na najbardziej istotnych biologicznie wariantach. Natomiast potencjalne źródła błędów jakie mogą wystąpić w procesie variant calling dotyczą błędów sekwencjonowania, niewłaściwie zmapowanych odczytów, artefaktów PCR oraz zanieczyszczenia próbek. 
+
+Po wykryciu wariantów kolejnym krokiem jest ich anotacja, analiza funkcjonalna oraz interpretacja kliniczna. Dzięki temu można lepiej zrozumieć potencjalne znaczenie biologiczne i medyczne wykrytych wariantów, co stanowi fundament dalszych badań lub zastosowań klinicznych.
+
+
