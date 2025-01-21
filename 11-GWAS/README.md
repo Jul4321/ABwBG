@@ -49,6 +49,10 @@ W wyniku filtracji zmniejszyła się liczba markerów SNP z 36901 do 36542.
 Utworzono zoptymalizowany **plik GDS** (Genomic Data Structure), który pozwolił na wydajne przetwarzanie danych SNP. 
 Na podstawie analizy PCA obliczono pierwsze cztery składowe główne (PC1, PC2, PC3, PC4) oraz utworzono wykresy, przedstawiające różnice między subpopulacjami. Subpopulacje zostały przypisane do wyników PCA na podstawie dodatkowych danych.
 
+![Wykres_PCA_1](https://github.com/user-attachments/assets/5a362174-16d1-4caa-8811-76caba6b9e85)
+![Wykres_PCA_2](https://github.com/user-attachments/assets/3fd136f5-9402-484b-b220-9cba0b91d88a)
+
+
 ## 5. Analiza GWAS
 
 ***5.1 Przygotowanie danych do analizy GWAS***
@@ -68,6 +72,8 @@ Po filtracji na podstawie wartości p-value (y < 1e-04) wybrano 6 markerów SNP 
 ***5.4 Wizualizacja wyników- wykres Manhattan***
 
 Wyniki zostały zwizualizowane na wykresie Manhattan, przedstawiającym rozkład istotnych markerów SNP wzdłuż chromosomów.
+
+![Wykres Manhattan](https://github.com/user-attachments/assets/f5ad9dc1-64a7-43ab-8cf1-4de016dc502a)
 
 
 
